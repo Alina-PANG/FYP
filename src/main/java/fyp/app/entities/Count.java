@@ -1,14 +1,8 @@
-package fyp.app.db;
+package fyp.app.entities;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
 
-@Entity
-@Table
-@SequenceGenerator(name="seq", initialValue=1)
 public class Count {
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="seq")
-    @Id
+
     private long id;
 
     private int time;
@@ -21,12 +15,12 @@ public class Count {
     private int countSwitch;
 
     private int firmId;
-    private BigDecimal finalFitness;
+    private Double finalFitness;
 
     public Count() {
     }
 
-    public Count(int time, String inputFile, int countExp, int countAdd, int countDrop, int countBorrow, int countSwitch, int firmId, BigDecimal finalFitness) {
+    public Count(int time, String inputFile, int countExp, int countAdd, int countDrop, int countBorrow, int countSwitch, int firmId, Double finalFitness) {
         this.time = time;
         this.inputFile = inputFile;
         this.countExp = countExp;
@@ -110,11 +104,11 @@ public class Count {
         this.firmId = firmId;
     }
 
-    public BigDecimal getFinalFitness() {
+    public Double getFinalFitness() {
         return finalFitness;
     }
 
-    public void setFinalFitness(BigDecimal finalFitness) {
+    public void setFinalFitness(Double finalFitness) {
         this.finalFitness = finalFitness;
     }
 }

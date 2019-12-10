@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 public class Globals {
 	private static final Logger logger = Logger.getLogger( Globals.class.getName());
+
 	/*
 	 * Default values 
 	 */

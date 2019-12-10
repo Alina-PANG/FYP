@@ -126,6 +126,27 @@ public class Firm implements Comparable<Firm> {
 	public String printCounts(){
 		return countExp + "\t" + countAdd + "\t" + countDrop + "\t" + countBorrow + "\t" + countSwitch;
 	}
+
+	public int getCountExp() {
+		return countExp;
+	}
+
+	public int getCountAdd() {
+		return countAdd;
+	}
+
+	public int getCountDrop() {
+		return countDrop;
+	}
+
+	public int getCountBorrow() {
+		return countBorrow;
+	}
+
+	public int getCountSwitch() {
+		return countSwitch;
+	}
+
 	// NO NEED; FITNESS IS ALWAYS CALCULATED ON THE FLY
 	// public void initFitness() {
 	// 	fitness = Simulation.landscape.getFitness(resourceConfig);

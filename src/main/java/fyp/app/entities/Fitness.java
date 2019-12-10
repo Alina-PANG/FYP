@@ -1,26 +1,20 @@
-package fyp.app.db;
+package fyp.app.entities;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
 
-@Entity
-@Table
-@SequenceGenerator(name="seq", initialValue=1)
 public class Fitness {
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
-    @Id
+
     private long id;
 
     private int time;
     private String inputFile;
     private int iteration;
-    private BigDecimal fitness;
+    private Double fitness;
     private int firmId;
 
     public Fitness() {
     }
 
-    public Fitness(int time, String inputFile, int iteration, BigDecimal fitness, int firmId) {
+    public Fitness(int time, String inputFile, int iteration, Double fitness, int firmId) {
         this.time = time;
         this.inputFile = inputFile;
         this.iteration = iteration;
@@ -60,11 +54,11 @@ public class Fitness {
         this.iteration = iteration;
     }
 
-    public BigDecimal getFitness() {
+    public Double getFitness() {
         return fitness;
     }
 
-    public void setFitness(BigDecimal fitness) {
+    public void setFitness(Double fitness) {
         this.fitness = fitness;
     }
 

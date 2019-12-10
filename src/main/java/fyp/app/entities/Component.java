@@ -1,13 +1,8 @@
-package fyp.app.db;
+package fyp.app.entities;
 
-import javax.persistence.*;
 
-@Entity
-@Table
-@SequenceGenerator(name="seq", initialValue=1)
 public class Component {
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="seq")
-    @Id
+
     private long id;
 
     private int time;

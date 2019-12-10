@@ -1,3 +1,6 @@
+### Mac
+*/.DS_Store
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -29,3 +32,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### output folder ##
+out/
+in/
+inf/

@@ -1,11 +1,13 @@
 package fyp.app;
 
+import fyp.app.entities.Count;
 import fyp.app.objects.*;
 import fyp.app.util.*;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
+
 
 public class Simulation {
 	private static Vector<Firm> firms;
@@ -20,13 +22,14 @@ public class Simulation {
 	}
 	
 	public static void main(String[] args) {
+
 		// LANDSCAPE INITIALIZATION
-		String infilename, outfilename, inf;
+		String inputFile, outputFile, inf;
 		int iterations, time;
-		if(args.length == 0) infilename = "in/in1.conf";
-		else infilename = args[0];
-		if(args.length < 1) outfilename = "out/out1.txt";
-		else outfilename = args[1];
+		if(args.length == 0) inputFile = "in/in1.conf";
+		else inputFile = args[0];
+		if(args.length < 1) outputFile = "out/out1.txt";
+		else outputFile = args[1];
 		if(args.length < 2) iterations = 5;
 		else iterations = Integer.parseInt(args[2]);
 		if(args.length < 3) time = 0;
@@ -34,12 +37,12 @@ public class Simulation {
 		if(args.length < 4) inf = "matrix0";
 		else inf = args[4];
 
-		FileIO.loadParameters(infilename, outfilename, iterations, inf);
+		FileIO.loadParameters(inputFile, outputFile, iterations, inf);
 		commonResourceConfig = new String[Globals.getN()];
 		landscape  = new Landscape(0, new InfluenceMatrix(Globals.getInfluenceMatrix()));
 
 		// COMPONENT INITIALIZATION
-		Globals.out.println("T\t"+time+"\t"+iterations+"\t"+inf+"\t"+infilename+"\t"+outfilename);
+		Globals.out.println("T\t"+time+"\t"+iterations+"\t"+inf+"\t"+inputFile+"\t"+outputFile);
 		Globals.setComponents();
 		Globals.out.print("C\t"+ Globals.getComponents().size()+"\t");
 		for(List<Integer> c: Globals.getComponents()){
@@ -122,9 +125,11 @@ public class Simulation {
 				Globals.out.println(t + "\t" + f.toStringFull(landscape));
 			}
 		}
+		DBConnector dbConnector = new DBConnector();
 		for (Firm f : firms) {
 			// Globals.out.println(t + "\t" + f.toStringWithFitness(landscape));
 			Globals.out.println("N\t"+f.getFirmID()+"\t"+f.printCounts());
+			dbConnector.saveCount(new Count(time, inputFile, f.getCountExp(), f.getCountAdd(), f.getCountDrop(), f.getCountBorrow(), f.getCountSwitch(), f.getFirmID(), f.getFitness()));
 		}
 	}
 	
