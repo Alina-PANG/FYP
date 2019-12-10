@@ -1,6 +1,8 @@
 package fyp.app;
 
+import fyp.app.entities.Component;
 import fyp.app.entities.Count;
+import fyp.app.entities.Fitness;
 import fyp.app.objects.*;
 import fyp.app.util.*;
 
@@ -22,7 +24,7 @@ public class Simulation {
 	}
 	
 	public static void main(String[] args) {
-
+		DBConnector dbConnector = new DBConnector();
 		// LANDSCAPE INITIALIZATION
 		String inputFile, outputFile, inf;
 		int iterations, time;
@@ -45,8 +47,11 @@ public class Simulation {
 		Globals.out.println("T\t"+time+"\t"+iterations+"\t"+inf+"\t"+inputFile+"\t"+outputFile);
 		Globals.setComponents();
 		Globals.out.print("C\t"+ Globals.getComponents().size()+"\t");
+		int index = 0;
 		for(List<Integer> c: Globals.getComponents()){
 			Globals.out.print(c.size() + "\t");
+			dbConnector.saveComponent(new Component(time, inputFile, c.size(), index));
+			index ++;
 		}
 		Globals.out.println();
 
@@ -119,13 +124,15 @@ public class Simulation {
 			}
 
 			Globals.out.println("L\t"+landscape.commonConfigToString()+"\t"+landscape.getLandscapeFitness());
+//			dbConnector.saveFitness(new Fitness(time, inputFile, t, landscape.getLandscapeFitness(), -1));
 			// output results
 			for (Firm f : firms) {
 				// Globals.out.println(t + "\t" + f.toStringWithFitness(landscape));
 				Globals.out.println(t + "\t" + f.toStringFull(landscape));
+				dbConnector.saveFitness(new Fitness(time, inputFile, t, f.getFitness(), f.getFirmID()));
 			}
 		}
-		DBConnector dbConnector = new DBConnector();
+
 		for (Firm f : firms) {
 			// Globals.out.println(t + "\t" + f.toStringWithFitness(landscape));
 			Globals.out.println("N\t"+f.getFirmID()+"\t"+f.printCounts());

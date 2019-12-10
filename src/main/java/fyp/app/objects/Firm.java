@@ -544,7 +544,7 @@ public class Firm implements Comparable<Firm> {
 		int numResourcesToAdd = Globals.rand.nextInt(Math.min(Globals.getN() - numCurrentResources + 1, resourcesIncrement)) + 1;
 		System.out.println("Add：Number of resources to add: "+numResourcesToAdd);
 
-		for (int j = 0; j < numResourcesToAdd; j++) {
+		for (int j = 0; j < numResourcesToAdd && !bag.isEmpty(); j++) {
 			int indexToAdd = (Integer)bag.randomPop();
 			addResourceConfig[indexToAdd] = Integer.toString(Globals.rand.nextInt(2));
 		}
@@ -624,7 +624,7 @@ public class Firm implements Comparable<Firm> {
 		System.arraycopy(resourceConfig, 0, dropResourceConfig, 0, resourceConfig.length);
 
 		// if a firm has only 1 (last) resource, it cannot drop it.  
-		if (numCurrentResources > 1) {
+		if (numCurrentResources > 1 && !bag.isEmpty()) {
 
 			int indexToDrop = (Integer) bag.randomPop();
 			dropResourceConfig[indexToDrop] = " ";
@@ -656,7 +656,7 @@ public class Firm implements Comparable<Firm> {
 		int numResourcesToChange = Math.min(Globals.rand.nextInt(searchScope) + 1, numResources);
 		System.out.println("Search：Number of resources to change: "+numResourcesToChange);
 
-		for(int i = 0; i < numResourcesToChange; i ++){
+		for(int i = 0; i < numResourcesToChange && !bag.isEmpty(); i ++){
 			int indexToChange = (Integer) bag.randomPop();
 			if(searchConfig[indexToChange].equals("1")) searchConfig[indexToChange] = "0";
 			else searchConfig[indexToChange] = "1";
