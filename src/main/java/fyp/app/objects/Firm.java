@@ -178,13 +178,13 @@ public class Firm implements Comparable<Firm> {
 		addOrDrop();
 	}
 
-	private void absoluteOrNormalizedDecision(String[] newConfig, int incrementalResource, double threshold, int type) {
+	private void absoluteOrNormalizedDecision(String[] newConfig, int numResources, double threshold, int type) {
 		double currentFitness = Simulation.landscape.getFitness(resourceConfig);
 		double newUtility = Simulation.landscape.getFitness(newConfig);
 
-		System.out.println("Resource Decision: "+resourceDecision+" New Utility = "+newUtility+", curFit = "+currentFitness+", threshold = "+threshold+" Num Diff Res = "+incrementalResource);
+		System.out.println("Resource Decision: "+resourceDecision+" New Utility = "+newUtility+", curFit = "+currentFitness+", threshold = "+threshold+" Num Res = "+numResources);
 		boolean absoluteDecision = resourceDecision.equals("abs") && (newUtility - currentFitness > threshold);
-		boolean relativeDecision = resourceDecision.equals("rel") && (newUtility - currentFitness) / incrementalResource > threshold;
+		boolean relativeDecision = resourceDecision.equals("rel") && (newUtility - currentFitness) / numResources > threshold;
 
 		if (absoluteDecision || relativeDecision){
 			System.out.println("Decision: Execute the new config: "+printResConfig(newConfig)+" (old config: "+printResConfig(resourceConfig)+")");
@@ -245,14 +245,14 @@ public class Firm implements Comparable<Firm> {
 			System.out.print("> New config: "); // output
 			System.out.println(printResConfig(newConfig)); // output
 
-			int numDiffResources = 0;
+			int numResources = 0;
 			for (int i = 0; i < newConfig.length; i++) {
-				if (!newConfig[i].equals(resourceConfig[i])) {
-					numDiffResources++;
+				if (!resourceConfig[i].equals(" ")) {
+					numResources++;
 				}
 			}
 
-			absoluteOrNormalizedDecision(newConfig, numDiffResources, threshold, type);
+			absoluteOrNormalizedDecision(newConfig, numResources, threshold, type);
 		} else{
 			System.out.println("Firm with ID "+this.firmID+" innovation too low!");
 		}
@@ -317,7 +317,7 @@ public class Firm implements Comparable<Firm> {
 
 			} else { // getResourceDecision() == "relative" **** ACTUALLY WE'RE NOT RUNNING THIS FOR NOW.  SO THIS PART HASN'T BEEN FULLY TESTED
 				// TODO ????
-				if ((addResourceUtility/numResourcesToAdd) - resourceThreshold > (dropResourceUtility/(numCurrentResources - 1)) + resourceThreshold) {
+				if ((addResourceUtility/numCurrentResources) - resourceThreshold > (dropResourceUtility/(numCurrentResources - 1)) + resourceThreshold) {
 					// add is better
 					// currentFitness is out of numResources whereas addResourceUtility is out of (numResources + 1)
 					// if ((addResourceUtility/(numCurrentResources + 1)) > (currentFitness/numCurrentResources) + Globals.getResourceThreshold()) {
@@ -607,14 +607,16 @@ public class Firm implements Comparable<Firm> {
 
 	}
 
+	// now it's only droping one resource
 	private String[] considerDropResource() {
 		// get current number of resources available to the firm
 		int numCurrentResources = 0;
 		Bag bag = new Bag();
 		for (int i = 0; i < resourceConfig.length; i++) {
 			if (!resourceConfig[i].equals(" ")) {
-				numCurrentResources++; 
-			} else bag.add(i);
+				numCurrentResources++;
+				bag.add(i);
+			}
 		}
 		int numResourcesToDrop = Globals.rand.nextInt(numCurrentResources > resourcesIncrement ? resourcesIncrement: numCurrentResources - 1) + 1;
 		System.out.println("Drop：Number of resources to drop: "+numResourcesToDrop);
@@ -625,8 +627,8 @@ public class Firm implements Comparable<Firm> {
 
 		// if a firm has only 1 (last) resource, it cannot drop it.  
 		if (numCurrentResources > 1 && !bag.isEmpty()) {
-
 			int indexToDrop = (Integer) bag.randomPop();
+			System.out.println("Dropping Resource: "+indexToDrop);
 			dropResourceConfig[indexToDrop] = " ";
 		}
 		System.out.println("Drop config: "+printResConfig(dropResourceConfig));

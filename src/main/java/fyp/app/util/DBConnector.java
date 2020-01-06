@@ -9,10 +9,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
 public class DBConnector {
-    private final String username = "root";
-    private final String password = "19980312";
+    private final String username = "hangzhi";//"root";
+    private final String password = "hangzhi";//"19980312";
     private final String myUrl = "jdbc:mysql://localhost/hyper_simulation?autoReconnect=true&useSSL=false";
-    private final String myDriver = "com.mysql.cj.jdbc.Driver";
+    private final String myDriver = "com.mysql.jdbc.Driver"; // "com.mysql.cj.jdbc.Driver";
 
     public void saveCount(Count count){
         try

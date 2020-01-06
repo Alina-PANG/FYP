@@ -30,7 +30,7 @@ public class Simulation {
 		int iterations, time;
 		if(args.length == 0) inputFile = "in/in1.conf";
 		else inputFile = args[0];
-		if(args.length < 1) outputFile = "out/out1.txt";
+		if(args.length < 1) outputFile = "out/out1_1.txt";
 		else outputFile = args[1];
 		if(args.length < 2) iterations = 5;
 		else iterations = Integer.parseInt(args[2]);
@@ -44,13 +44,14 @@ public class Simulation {
 		landscape  = new Landscape(0, new InfluenceMatrix(Globals.getInfluenceMatrix()));
 
 		// COMPONENT INITIALIZATION
-		Globals.out.println("T\t"+time+"\t"+iterations+"\t"+inf+"\t"+inputFile+"\t"+outputFile);
+//		Globals.out.println("T\t"+time+"\t"+iterations+"\t"+inf+"\t"+inputFile+"\t"+outputFile);
+		Globals.out.println("T\t"+inf);
 		Globals.setComponents();
 		Globals.out.print("C\t"+ Globals.getComponents().size()+"\t");
 		int index = 0;
 		for(List<Integer> c: Globals.getComponents()){
 			Globals.out.print(c.size() + "\t");
-			dbConnector.saveComponent(new Component(time, inputFile, c.size(), index));
+//			dbConnector.saveComponent(new Component(time, inputFile, c.size(), index));
 			index ++;
 		}
 		Globals.out.println();
@@ -78,7 +79,7 @@ public class Simulation {
 				firmID++;
 			}
 		}
-		Globals.out.println("F\t"+firms.size());
+//		Globals.out.println("F\t"+firms.size());
 		summarizeCommonResourceConfig();
 
 		/**
@@ -123,20 +124,20 @@ public class Simulation {
 				}
 			}
 
-			Globals.out.println("L\t"+landscape.commonConfigToString()+"\t"+landscape.getLandscapeFitness());
+			Globals.out.println("L\t"+t+"\t"+landscape.commonConfigToString()+"\t"+landscape.getLandscapeFitness());
 //			dbConnector.saveFitness(new Fitness(time, inputFile, t, landscape.getLandscapeFitness(), -1));
 			// output results
 			for (Firm f : firms) {
 				// Globals.out.println(t + "\t" + f.toStringWithFitness(landscape));
 				Globals.out.println(t + "\t" + f.toStringFull(landscape));
-				dbConnector.saveFitness(new Fitness(time, inputFile, t, f.getFitness(), f.getFirmID()));
+//				dbConnector.saveFitness(new Fitness(time, inputFile, t, f.getFitness(), f.getFirmID()));
 			}
 		}
 
 		for (Firm f : firms) {
 			// Globals.out.println(t + "\t" + f.toStringWithFitness(landscape));
-			Globals.out.println("N\t"+f.getFirmID()+"\t"+f.printCounts());
-			dbConnector.saveCount(new Count(time, inputFile, f.getCountExp(), f.getCountAdd(), f.getCountDrop(), f.getCountBorrow(), f.getCountSwitch(), f.getFirmID(), f.getFitness()));
+			Globals.out.println("N\t"+f.getFirmID()+"\t"+f.printCounts()+"\t"+f.getFitness());
+//			dbConnector.saveCount(new Count(time, inputFile, f.getCountExp(), f.getCountAdd(), f.getCountDrop(), f.getCountBorrow(), f.getCountSwitch(), f.getFirmID(), f.getFitness()));
 		}
 	}
 	
