@@ -6,10 +6,10 @@ def main():
     # db = mysql.connector.connect(host="localhost", user="hangzhi", passwd="hangzhi", database="hyper_simulation")
     mycursor = db.cursor()
 
-    numInputFile = int(input("input file number: "))
+    inputFiles = input("input file number: ").split(',')
     numTime = int(input("number of times: "))
 
-    for i in range(1, numInputFile + 1):
+    for i in range(int(inputFiles[0]), int(inputFiles[1]) + 1):
         countVal, componentVal, curMatrix, inputFile = [], [], "", "in" + str(i) + ".conf"
         for t in range(1, numTime + 1):
             fitnessVal = []

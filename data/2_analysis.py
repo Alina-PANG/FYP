@@ -8,8 +8,10 @@ def main():
     inputFile = input("input file number: ").split(',')
     matrixNum = input("matrix number: ")
     iterationNum = int(input("number of iterations: "))
-    fitness.initResChange(cursor,inputFile,matrixNum, iterationNum)
-    count.countNum(cursor,inputFile,matrixNum)
+    fitness.performanceIteration(cursor,inputFile,matrixNum, iterationNum)
+    # fitness.componentSizeChange(cursor, inputFile, matrixNum)
+    # fitness.avgRankChange(cursor, inputFile, matrixNum,iterationNum)
+    # count.countNum(cursor,inputFile,matrixNum)
     db.close()
 
 if __name__ == '__main__':
