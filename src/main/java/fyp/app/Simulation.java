@@ -8,6 +8,7 @@ import fyp.app.util.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 
@@ -22,13 +23,31 @@ public class Simulation {
 			 System.out.println(Location.getLocationStringFromInt(i) + "\t" + landscape.getFitness(Location.getLocationFromInt(i)));
 		 }
 	}
+
+	private static void printComponentRelationship(){
+		System.out.println("\n<<<< LENDING FIRMS >>>>>");
+		for(int i = 0; i < Globals.getComponents().size(); i ++){
+			System.out.print("Component "+i+": ");
+			for (Firm f: Globals.getSharingFirmsForComponent(i)){
+				System.out.print(f.getFirmID()+", ");
+			}
+			System.out.println();
+		}
+		System.out.println("<<<< BORROWING FIRMS >>>>>");
+		for(Firm f: Globals.getFirms()){
+			System.out.print("Firm "+f.getFirmID()+" ");
+			for (Map.Entry<Integer, Integer> entry : f.getBorrowedComponents().entrySet()) {
+				System.out.println("component: "+ entry.getKey() + ": Firm ID = " + entry.getValue().toString());
+			}
+		}
+	}
 	
 	public static void main(String[] args) {
 		DBConnector dbConnector = new DBConnector();
 		// LANDSCAPE INITIALIZATION
 		String inputFile, outputFile, inf;
 		int iterations, time;
-		if(args.length == 0) inputFile = "in/in1.conf";
+		if(args.length == 0) inputFile = "in/in0.conf";
 		else inputFile = args[0];
 		if(args.length < 1) outputFile = "out/out1_1.txt";
 		else outputFile = args[1];
@@ -36,7 +55,7 @@ public class Simulation {
 		else iterations = Integer.parseInt(args[2]);
 		if(args.length < 3) time = 0;
 		else time = Integer.parseInt(args[3]);
-		if(args.length < 4) inf = "matrix0";
+		if(args.length < 4) inf = "matrix12";
 		else inf = args[4];
 
 		FileIO.loadParameters(inputFile, outputFile, iterations, inf);
@@ -79,21 +98,27 @@ public class Simulation {
 				firmID++;
 			}
 		}
+		Globals.setFirms(firms);
 //		Globals.out.println("F\t"+firms.size());
 		summarizeCommonResourceConfig();
+		Globals.initializeSharingFirm();
+		System.out.println("\nPeriod: "+"-1"+" ====== Lending"); // output
+		for(Firm f: firms){
+			f.componentOperations(2);
+		}
 
 		/**
 		 *  RUN ITERATIONS
 		 */
 		for (int t = 0; t < Globals.getIterations(); t++) {
-			Globals.refreshLendingFirms(); // edited: clean up the lending firm list -> maintaining cost & benefit for each period - NPV & PV issue?
+			// keep record of previous round resource configuration (used in switching/borrowing)
+			for (Firm f : firms) {
+				f.keepRecord();
+			}
+
 			System.out.println("\nPeriod: "+t+" ====== Changing/Adding/Dropping Resources"); // output
 			for (Firm f : firms) {
 				f.makeDecision();
-			}
-			System.out.println("\nPeriod: "+t+" ====== Lending"); // output
-			for (Firm f : firms) {
-				f.componentOperations(2);
 			}
 			Globals.printSharingFirms(); // output
 			System.out.println("\nPeriod: "+t+" ====== Switching"); // output
@@ -104,6 +129,17 @@ public class Simulation {
 			for (Firm f : firms) {
 				f.componentOperations(0);
 			}
+			// modify global sharing firm list
+			System.out.println("\nPeriod: "+t+" ====== Lending"); // output
+			for(Firm f: firms){
+				f.componentOperations(2);
+			}
+			// sync components: ceases to lend, update changed resources in borrowed component
+			for(Firm f: firms){
+				f.syncComponent();
+			}
+
+			printComponentRelationship();
 
 			summarizeCommonResourceConfig();
 

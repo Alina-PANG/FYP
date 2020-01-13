@@ -29,7 +29,7 @@ public class Globals {
 	private static int maxCSize = 5;
 	private static int minCSize = 3;
 	private static List<List<Integer>> components;
-	private static Map<Integer, List<Firm>> sharingFirms;
+	private static Map<Integer, Set<Firm>> sharingFirms;
 
 	// not used
 	private static int numNeeds = 10;
@@ -39,6 +39,7 @@ public class Globals {
 	// private static int initResources = 3;
 	private static int[] numFirms; 
 	private static int[] initResources;
+	private static List<Firm> firms;
 	// private static int numFirms = 1;
 	//public static String adaptation = "resources";
 	private static double[] innovation; // = 0.0d;
@@ -128,33 +129,59 @@ public class Globals {
 		}
 	}
 
+	public static int getComponentIndexByResIndex(int i){
+		for(int j = 0; j < components.size(); j ++){
+			for(int c: components.get(j)){
+				if(c == i) return j;
+			}
+		}
+		return -1;
+	}
+
 	public static List<List<Integer>> getComponents(){ return components; }
 
 	public static List<Integer> getComponentByIndex(int i) {return components.get(i);};
 
-	public static void refreshLendingFirms(){
+	public static Firm getFirmById(int id){
+		for(Firm f: firms){
+			if(f.getFirmID() == id)
+				return f;
+		}
+		return null;
+	}
+
+	public static void initializeSharingFirm(){
 		sharingFirms = new HashMap<>();
+	}
+
+	public static void removeSharingFirm(int componentIndex, Firm f){
+		if(sharingFirms.containsKey(componentIndex) && sharingFirms.get(componentIndex).contains(f)){
+			sharingFirms.get(componentIndex).remove(f);
+		}
 	}
 
 	public static void addSharingFirms(int componentIndex, Firm f) {
 		if(sharingFirms.containsKey(componentIndex)){
 			sharingFirms.get(componentIndex).add(f);
 		} else{
-			List<Firm> list = new ArrayList<>();
+			Set<Firm> list = new HashSet<>();
 			list.add(f);
 			sharingFirms.put(componentIndex, list);
 		}
 	}
 
-	public static List<Firm> getSharingFirmsForComponent(int i) {
-		return sharingFirms.get(i);
+	public static Set<Firm> getSharingFirmsForComponent(int i) {
+		if (sharingFirms.containsKey(i)){
+			return sharingFirms.get(i);
+		}
+		return null;
 	}
 
 	public static void printSharingFirms(){
 		System.out.println("**** All sharing Firms ****");
-		for(Map.Entry<Integer, List<Firm>> entry: sharingFirms.entrySet()){
+		for(Map.Entry<Integer, Set<Firm>> entry: sharingFirms.entrySet()){
 			System.out.println("Component Index:" + entry.getKey());
-			List<Firm> firms = entry.getValue();
+			Set<Firm> firms = entry.getValue();
 			for(Firm f: firms) {
 				System.out.print(f.getFirmID()+" ");
 			}
@@ -163,7 +190,16 @@ public class Globals {
 		if(sharingFirms.entrySet().size() == 0) System.out.println("null\n");
 	}
 
+	public static List<Firm> getFirms() {
+		return firms;
+	}
+
+	public static void setFirms(List<Firm> firms) {
+		Globals.firms = firms;
+	}
+
 	/** FIRM PARAMETERS */
+
 
 	public static void setParameters(String fullParameterString, int checkNum) {
 		//#firms=50,5,1,1,1,0,abs,0.2;50,15,1,1,1,0,abs,0.2
