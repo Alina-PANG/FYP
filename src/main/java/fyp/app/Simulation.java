@@ -28,6 +28,7 @@ public class Simulation {
 		System.out.println("\n<<<< LENDING FIRMS >>>>>");
 		for(int i = 0; i < Globals.getComponents().size(); i ++){
 			System.out.print("Component "+i+": ");
+			if(Globals.getSharingFirmsForComponent(i) == null || Globals.getSharingFirmsForComponent(i).size() == 0) continue;
 			for (Firm f: Globals.getSharingFirmsForComponent(i)){
 				System.out.print(f.getFirmID()+", ");
 			}
@@ -47,7 +48,7 @@ public class Simulation {
 		// LANDSCAPE INITIALIZATION
 		String inputFile, outputFile, inf;
 		int iterations, time;
-		if(args.length == 0) inputFile = "in/in0.conf";
+		if(args.length == 0) inputFile = "in/in1.conf";
 		else inputFile = args[0];
 		if(args.length < 1) outputFile = "out/out1_1.txt";
 		else outputFile = args[1];

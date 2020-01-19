@@ -135,12 +135,14 @@ public class Landscape {
 		double fitness = 0.0d;
 		//CALCULATE FITNESS
 		String[] config = new String[Globals.getN()];
+		int count = 0;
 		// replace empty settings with commonResourceConfig
 		for (int i = 0; i < resConfig.length; i++) {
 			if (resConfig[i].equals(" ")) {
 				config[i] = commonResourceConfig[i];
 			} else {
 				config[i] = resConfig[i];
+				count ++;
 			}
 			// System.out.print(config[i]);
 		}
@@ -166,7 +168,9 @@ public class Landscape {
 				fitness += getFitnessContribution(s, i);
 			} 
 		}
-		fitness = fitness / Globals.getN();
+		// question
+//		fitness = fitness / Globals.getN();
+		fitness = fitness / count;
 
 		// return fitness;
 		// Return Normalized fitness (fitness - landscapeMinFitness) / (landscapeMaxFitness - landscapeMinFitness)

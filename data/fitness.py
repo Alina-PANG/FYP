@@ -3,7 +3,7 @@ import numpy
 import matplotlib.pyplot as plt
 
 
-def performanceIteration(cursor, inputFile,matrixNum, iterationNum):
+def performanceIteration(cursor, inputFile,matrixNum, iterationNum, numTimes):
     # avg, sd, and plotting of firm fitness by firm ID + fitness
     for f in inputFile:
         meanArr = []
@@ -11,7 +11,9 @@ def performanceIteration(cursor, inputFile,matrixNum, iterationNum):
         cursor.execute("SELECT iteration, fitness from fitness " +
                        "where firmId!=" + str(-1) +
                        " and inputFile='in" + f + ".conf'" +
-                       " and matrix='matrix" + matrixNum + "'")
+                       " and matrix='matrix" + matrixNum + "'" +
+                       " and times >= " + numTimes[0] +
+                       " and times <= " + numTimes[1])
         df = pd.DataFrame(cursor.fetchall(), columns=['iteration', 'fitness'])
         for i in range(0, iterationNum):
             row = df.loc[df['iteration'] == i].fitness.to_numpy()
@@ -30,7 +32,7 @@ def performanceIteration(cursor, inputFile,matrixNum, iterationNum):
     plt.savefig("performance"+matrixNum+"_".join(inputFile)+".png")
 
 
-def componentSizeChange(cursor, inputFile, matrixNum):
+def componentSizeChange(cursor, inputFile, matrixNum, numTimes):
     iteration = [24,49,74,99]
     for i in iteration:
         meanArr = []
@@ -40,7 +42,9 @@ def componentSizeChange(cursor, inputFile, matrixNum):
                            "where iteration=" + str(i) +
                            " and firmId!=" + str(-1) +
                            " and inputFile='in" + f + ".conf'" +
-                           " and matrix='matrix" + matrixNum + "'")
+                           " and matrix='matrix" + matrixNum + "'" +
+                           " and times >= " + numTimes[0] +
+                           " and times <= " + numTimes[1])
             row = numpy.array(cursor.fetchall())
             mean = numpy.mean(row)
             std = numpy.std(row)
@@ -58,7 +62,7 @@ def componentSizeChange(cursor, inputFile, matrixNum):
     plt.show()
     # plt.savefig("componentResult.png")
 
-def avgRankChange(cursor, inputFile, matrixNum,iterationNum):
+def avgRankChange(cursor, inputFile, matrixNum,iterationNum, numTimes):
     firms = range(0, 20)
     for f in inputFile:
         meanArr = []
@@ -66,7 +70,9 @@ def avgRankChange(cursor, inputFile, matrixNum,iterationNum):
         cursor.execute("SELECT times, firmId, iteration, firmRank from fitness " +
                        "where firmId!=-1" +
                        " and inputFile='in" + f + ".conf'" +
-                       " and matrix='matrix" + matrixNum + "'")
+                       " and matrix='matrix" + matrixNum + "'" +
+                       " and times >= " + numTimes[0] +
+                       " and times <= " + numTimes[1])
         df = pd.DataFrame(cursor.fetchall(), columns=['times', 'firmId', 'iteration', 'firmRank'])
         for firm in firms:
             print('input=' + f, 'firm=' + str(firm))

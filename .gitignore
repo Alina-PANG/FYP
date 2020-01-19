@@ -1,6 +1,6 @@
 ### Mac
 */.DS_Store
-
+*.png
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

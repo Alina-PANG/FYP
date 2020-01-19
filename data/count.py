@@ -4,7 +4,7 @@ import numpy
 import pymysql
 import pandas as pd
 
-def countNum(cursor,inputFile,matrixNum):
+def countNum(cursor,inputFile,matrixNum, numTimes):
 
     meanArr = []
     stdArr = []
@@ -15,7 +15,9 @@ def countNum(cursor,inputFile,matrixNum):
         for j in range(0, 5):
             cursor.execute("SELECT count" + countArr[j] + " from count " +
                            "where inputFile='in" + i + ".conf'" +
-                           " and matrix='matrix" + matrixNum + "'")
+                           " and matrix='matrix" + matrixNum + "'"
+                           " and times >= " + numTimes[0] +
+                           " and times <= " + numTimes[1])
             tempRow = cursor.fetchall()
             row = numpy.array(tempRow)
             mean = numpy.mean(row)

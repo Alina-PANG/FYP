@@ -489,17 +489,19 @@ public class Firm implements Comparable<Firm> {
 			cIndexToBorrow = componentCanBeBorrowed.get(tempIndexToBorrow);
 			Set<Firm> firms = Globals.getSharingFirmsForComponent(cIndexToBorrow);
 			if(firms == null || firms.size() == 0) {
-			}
-			int fIndexToBorrow = rnd.nextInt(firms.size());
-			List<Firm> list = new ArrayList<>(firms);
-			Firm f = list.get(fIndexToBorrow);
+				System.out.println("Firm with ID "+this.firmID + " decides not to borrow");
+			}else{
+				int fIndexToBorrow = rnd.nextInt(firms.size());
+				List<Firm> list = new ArrayList<>(firms);
+				Firm f = list.get(fIndexToBorrow);
 
-			System.out.println("> Component Index: " + cIndexToBorrow); // output
-			System.out.println("> Borrowing from firm: "+f.getFirmID()+" with config "+printResConfig(f.resourceConfig)); // output
-			for(int index: components.get(cIndexToBorrow)){
-				newConfig[index] = f.getPreviousResourceConfig()[index];
+				System.out.println("> Component Index: " + cIndexToBorrow); // output
+				System.out.println("> Borrowing from firm: "+f.getFirmID()+" with config "+printResConfig(f.resourceConfig)); // output
+				for(int index: components.get(cIndexToBorrow)){
+					newConfig[index] = f.getPreviousResourceConfig()[index];
+				}
+				lendingFirmID = f.getFirmID();
 			}
-			lendingFirmID = f.getFirmID();
 		}
 		else System.out.println("Firm "+this.firmID+" has no available firms to borrow.");
 
@@ -544,22 +546,22 @@ public class Firm implements Comparable<Firm> {
 			Set<Firm> firms = Globals.getSharingFirmsForComponent(cIndexToBorrow);
 			if(firms == null || firms.size() < 2) {
 				System.out.println("Firm with ID "+this.firmID + " decides not to switch");
-			}
-
-			int fIndexToBorrow = rnd.nextInt(firms.size());
-			List<Firm> list = new ArrayList<>(firms);
-			Firm f = list.get(fIndexToBorrow);
-			// to prevent the firm from swtiching to its own configuration
-			while(f.getFirmID() == this.firmID) {
-				fIndexToBorrow = rnd.nextInt(firms.size());
-				f = list.get(fIndexToBorrow);
-			}
-			lendingFirmID = f.getFirmID();
-			System.out.println("> Component Index: " + cIndexToBorrow); // output
-			System.out.println("> Switching to firm: "+f.getFirmID()+" with config "+printResConfig(f.resourceConfig)); // output
-			System.out.println("> Current Firm: "+this.firmID+" with config "+printResConfig(this.resourceConfig)); // output
-			for(int index: components.get(cIndexToBorrow)){
-				newConfig[index] = f.getPreviousResourceConfig()[index];
+			} else{
+				int fIndexToBorrow = rnd.nextInt(firms.size());
+				List<Firm> list = new ArrayList<>(firms);
+				Firm f = list.get(fIndexToBorrow);
+				// to prevent the firm from swtiching to its own configuration
+				while(f.getFirmID() == this.firmID) {
+					fIndexToBorrow = rnd.nextInt(firms.size());
+					f = list.get(fIndexToBorrow);
+				}
+				lendingFirmID = f.getFirmID();
+				System.out.println("> Component Index: " + cIndexToBorrow); // output
+				System.out.println("> Switching to firm: "+f.getFirmID()+" with config "+printResConfig(f.resourceConfig)); // output
+				System.out.println("> Current Firm: "+this.firmID+" with config "+printResConfig(this.resourceConfig)); // output
+				for(int index: components.get(cIndexToBorrow)){
+					newConfig[index] = f.getPreviousResourceConfig()[index];
+				}
 			}
 		}
 		else System.out.println("Firm "+this.firmID+" has no available switches.");
@@ -731,7 +733,8 @@ public class Firm implements Comparable<Firm> {
 				if(!borrowedRes.contains(i)) bag.add(i);
 			}
 		}
-		int numResourcesToDrop = Globals.rand.nextInt(numCurrentResources > resourcesIncrement ? resourcesIncrement: numCurrentResources - 1) + 1;
+		// TODO: limited number of resources to drop
+		int numResourcesToDrop = 1; // Globals.rand.nextInt(numCurrentResources > resourcesIncrement ? resourcesIncrement: numCurrentResources - 1) + 1;
 		System.out.println("Drop：Number of resources to drop: "+numResourcesToDrop);
 
 		// drop resource config: copy of current resourceConfig
