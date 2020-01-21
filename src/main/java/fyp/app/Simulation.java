@@ -48,7 +48,7 @@ public class Simulation {
 		// LANDSCAPE INITIALIZATION
 		String inputFile, outputFile, inf;
 		int iterations, time;
-		if(args.length == 0) inputFile = "in/in1.conf";
+		if(args.length == 0) inputFile = "in/in0.conf";
 		else inputFile = args[0];
 		if(args.length < 1) outputFile = "out/out1_1.txt";
 		else outputFile = args[1];
@@ -56,10 +56,10 @@ public class Simulation {
 		else iterations = Integer.parseInt(args[2]);
 		if(args.length < 3) time = 0;
 		else time = Integer.parseInt(args[3]);
-		if(args.length < 4) inf = "matrix12";
+		if(args.length < 4) inf = "12";
 		else inf = args[4];
 
-		FileIO.loadParameters(inputFile, outputFile, iterations, inf);
+		FileIO.loadParameters(inputFile, outputFile, iterations, "matrix"+inf);
 		commonResourceConfig = new String[Globals.getN()];
 		landscape  = new Landscape(0, new InfluenceMatrix(Globals.getInfluenceMatrix()));
 
@@ -148,7 +148,7 @@ public class Simulation {
 
 			// assign rankings
 			int currentRank = 1;
-			double currentFitness = 1.0d;
+			double currentFitness = Double.MIN_VALUE;
 			for (int i = 0; i < firms.size(); i++) {
 				Firm f = (Firm)firms.get(i);
 				double focalFitness = f.getFitness();
@@ -166,7 +166,7 @@ public class Simulation {
 			// output results
 			for (Firm f : firms) {
 				// Globals.out.println(t + "\t" + f.toStringWithFitness(landscape));
-				Globals.out.println(t + "\t" + f.toStringFull(landscape));
+				Globals.out.println(t + "\t" + f.getFirmID()+ "\t" + f.getRank() + "\t" + f.printResConfig(f.getResourceConfig()) + "\t" + f.getFitness());
 //				dbConnector.saveFitness(new Fitness(time, inputFile, t, f.getFitness(), f.getFirmID()));
 			}
 		}

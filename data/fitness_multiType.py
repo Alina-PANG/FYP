@@ -15,7 +15,7 @@ def performanceIteration(cursor, inputFile,matrixNum, iterationNum, numTypes, nu
                            "where firmId>=" + str(startF) +
                            " and firmId<=" + str(endF)+
                            " and inputFile='in" + f + ".conf'" +
-                           " and matrix='matrix" + matrixNum + "'" +
+                           " and matrix='"+matrixNum +"'"+
                            " and times >= " + numTimes[0] +
                            " and times <= " + numTimes[1])
             df = pd.DataFrame(cursor.fetchall(), columns=['iteration', 'fitness'])
@@ -48,7 +48,7 @@ def componentSizeChange(cursor, inputFile, matrixNum, numTimes):
                            "where iteration=" + str(i) +
                            " and firmId!=" + str(-1) +
                            " and inputFile='in" + f + ".conf'" +
-                           " and matrix='matrix" + matrixNum + "'" +
+                           " and matrix='"+matrixNum +"'"+
                            " and times >= " + numTimes[0] +
                            " and times <= " + numTimes[1])
             row = numpy.array(cursor.fetchall())
@@ -78,7 +78,7 @@ def avgRankChange(cursor, inputFile, matrixNum,iterationNum, numTypes, numTimes)
             cursor.execute("SELECT times, firmId, iteration, firmRank from fitness " +
                            "where firmId!=-1" +
                            " and inputFile='in" + f + ".conf'" +
-                           " and matrix='matrix" + matrixNum + "'" +
+                           " and matrix='"+matrixNum +"'"+
                            " and times >= " + numTimes[0] +
                            " and times <= " + numTimes[1])
             df = pd.DataFrame(cursor.fetchall(), columns=['times', 'firmId', 'iteration', 'firmRank'])

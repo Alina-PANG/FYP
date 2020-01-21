@@ -1,7 +1,5 @@
-# import mysql.connector
 import matplotlib.pyplot as plt
 import numpy
-import pymysql
 import pandas as pd
 
 def countNum(cursor,inputFile,matrixNum, numTimes):
@@ -15,7 +13,7 @@ def countNum(cursor,inputFile,matrixNum, numTimes):
         for j in range(0, 5):
             cursor.execute("SELECT count" + countArr[j] + " from count " +
                            "where inputFile='in" + i + ".conf'" +
-                           " and matrix='matrix" + matrixNum + "'"
+                           " and matrix='"+matrixNum +"'"+
                            " and times >= " + numTimes[0] +
                            " and times <= " + numTimes[1])
             tempRow = cursor.fetchall()

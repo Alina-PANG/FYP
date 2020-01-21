@@ -1,9 +1,9 @@
-#import pymysql
-import mysql.connector
+import pymysql
+# import mysql.connector
 
 def main():
-    #db = pymysql.connect("localhost", "root", "19980312", "hyper_simulation")
-    db = mysql.connector.connect(host="localhost", user="hangzhi", passwd="hangzhi", database="hyper_simulation")
+    db = pymysql.connect("localhost", "root", "19980312", "hyper_simulation")
+    # db = mysql.connector.connect(host="localhost", user="hangzhi", passwd="hangzhi", database="hyper_simulation")
     cursor = db.cursor()
     inputFile = input("input file number: ").split(',')
     matrixNum = input("matrix number: ")

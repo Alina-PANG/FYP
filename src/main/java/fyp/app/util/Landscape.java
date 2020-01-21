@@ -169,8 +169,9 @@ public class Landscape {
 			} 
 		}
 		// question
-//		fitness = fitness / Globals.getN();
-		fitness = fitness / count;
+		fitness = fitness / Globals.getN();
+//		if(count == 0) return 0.0;
+//		fitness = fitness / count;
 
 		// return fitness;
 		// Return Normalized fitness (fitness - landscapeMinFitness) / (landscapeMaxFitness - landscapeMinFitness)

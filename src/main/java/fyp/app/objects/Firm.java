@@ -490,6 +490,7 @@ public class Firm implements Comparable<Firm> {
 			Set<Firm> firms = Globals.getSharingFirmsForComponent(cIndexToBorrow);
 			if(firms == null || firms.size() == 0) {
 				System.out.println("Firm with ID "+this.firmID + " decides not to borrow");
+				return;
 			}else{
 				int fIndexToBorrow = rnd.nextInt(firms.size());
 				List<Firm> list = new ArrayList<>(firms);
@@ -503,7 +504,10 @@ public class Firm implements Comparable<Firm> {
 				lendingFirmID = f.getFirmID();
 			}
 		}
-		else System.out.println("Firm "+this.firmID+" has no available firms to borrow.");
+		else {
+			System.out.println("Firm "+this.firmID+" has no available firms to borrow.");
+			return;
+		}
 
 		System.out.print("> New config: "); // output
 		System.out.println(printResConfig(newConfig)); // output
@@ -546,6 +550,7 @@ public class Firm implements Comparable<Firm> {
 			Set<Firm> firms = Globals.getSharingFirmsForComponent(cIndexToBorrow);
 			if(firms == null || firms.size() < 2) {
 				System.out.println("Firm with ID "+this.firmID + " decides not to switch");
+				return;
 			} else{
 				int fIndexToBorrow = rnd.nextInt(firms.size());
 				List<Firm> list = new ArrayList<>(firms);
@@ -564,7 +569,10 @@ public class Firm implements Comparable<Firm> {
 				}
 			}
 		}
-		else System.out.println("Firm "+this.firmID+" has no available switches.");
+		else {
+			System.out.println("Firm "+this.firmID+" has no available switches.");
+			return;
+		}
 		System.out.print("> New config: "); // output
 		System.out.println(printResConfig(newConfig)); // output
 
@@ -581,7 +589,7 @@ public class Firm implements Comparable<Firm> {
 		}
 	}
 
-	private String printResConfig(String[] config){
+	public String printResConfig(String[] config){
 		StringBuilder sb = new StringBuilder();
 		for(String s: config){
 			if(s.equals(" ")) sb.append(".");
@@ -1027,7 +1035,7 @@ public class Firm implements Comparable<Firm> {
 
 	public String toStringFull(Landscape l) {
 		//System.out.println(getResourceConfigString());
-		String retString = firmID + "\t" + rank + "\t" + printResConfig(resourceConfig) + "\t" + l.getFitness(resourceConfig);
+		String retString = firmID + "\t" + rank + "\t" + printResConfig(resourceConfig) + "\t" + this.getFitness();
 		return retString;
 	}
 }

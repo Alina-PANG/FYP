@@ -1,5 +1,6 @@
 #import pymysql
 import mysql.connector
+import math
 import os
 
 def main():
@@ -16,7 +17,9 @@ def main():
             countVal, componentVal, curMatrix, inputFile = [], [], "", "in" + str(i) + ".conf"
             for t in range(int(numTime[0]), int(numTime[1]) + 1):
                 fitnessVal = []
-                fileName = "../out/outmatrix" +m+"_"+ str(i) + "_" + str(t) + ".txt"
+                fileName = "../out/out" +m+"_"+ str(i) + "_" + str(t) + ".txt"
+                if not os.path.exists(fileName): continue
+                print(fileName)
                 f = open(fileName,"r")
                 lines = f.readlines()
                 for l in lines:
@@ -31,28 +34,31 @@ def main():
                             index += 1
                     elif firstChar == "L":
                         iteration, config, fitness = l.split("\t")[1:]
+                        if math.isnan(float(fitness)): fitness = 0
                         fitnessVal.append((t, inputFile, curMatrix, int(iteration), float(fitness), config, -1, -1))
                     elif firstChar == "N":
                         firmId, countExp, countAdd, countDrop, countBorrow, countSwitch, finalFitness = l.split("\t")[1:]
+                        if math.isnan(float(finalFitness)): finalFitness = 0
                         countVal.append((
                                         t, inputFile, curMatrix, int(countExp), int(countAdd), int(countDrop), int(countBorrow),
                                         int(countSwitch), int(firmId), float(finalFitness)))
                     else:
                         iteration, firmId, rank, config, fitness = l.split("\t")
+                        if math.isnan(float(fitness)): fitness = 0
                         fitnessVal.append(
                             (t, inputFile, curMatrix, int(iteration), float(fitness), config, int(firmId), int(rank)))
 
                 fitnessSql = "INSERT INTO fitness (times, inputFile, matrix, iteration, fitness, fitnessConfig, firmId, firmRank) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                 mycursor.executemany(fitnessSql, fitnessVal)
-                f.close()
                 os.remove(fileName)
+                db.commit()
+                f.close()
 
             countSql = "INSERT INTO count (times, inputFile, matrix, countExp, countAdd, countDrop, countBorrow, countSwitch, firmId, finalFitness) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             componentSql = "INSERT INTO component (times, inputFile, matrix, size, CIndex) VALUES (%s, %s, %s, %s, %s)"
             mycursor.executemany(countSql, countVal)
             mycursor.executemany(componentSql, componentVal)
-
-    db.commit()
+            db.commit()
 
 if __name__ == '__main__':
     main()
