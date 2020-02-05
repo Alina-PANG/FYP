@@ -177,6 +177,10 @@ public class Globals {
 		return null;
 	}
 
+	public static Map<Integer, Set<Firm>> getSharingFirms() {
+		return sharingFirms;
+	}
+
 	public static void printSharingFirms(){
 		System.out.println("**** All sharing Firms ****");
 		for(Map.Entry<Integer, Set<Firm>> entry: sharingFirms.entrySet()){

@@ -6,10 +6,7 @@ import fyp.app.entities.Fitness;
 import fyp.app.objects.*;
 import fyp.app.util.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 
 public class Simulation {
@@ -20,7 +17,7 @@ public class Simulation {
 	private static void printLandsacpe(){
 		System.out.println("\n***** Simulation.java: Landscape ******");
 		 for (int i = 0; i < (int)(Math.pow(2, Globals.getN())); i++) {
-			 System.out.println(Location.getLocationStringFromInt(i) + "\t" + landscape.getFitness(Location.getLocationFromInt(i)));
+			 System.out.                                                     println(Location.getLocationStringFromInt(i) + "\t" + landscape.getFitness(Location.getLocationFromInt(i)));
 		 }
 	}
 
@@ -38,8 +35,9 @@ public class Simulation {
 		for(Firm f: Globals.getFirms()){
 			System.out.print("Firm "+f.getFirmID()+" ");
 			for (Map.Entry<Integer, Integer> entry : f.getBorrowedComponents().entrySet()) {
-				System.out.println("component: "+ entry.getKey() + ": Firm ID = " + entry.getValue().toString());
+				System.out.print("component: "+ entry.getKey() + ": Firm ID = " + entry.getValue().toString()+"; ");
 			}
+			System.out.println();
 		}
 	}
 	
@@ -50,7 +48,7 @@ public class Simulation {
 		int iterations, time;
 		if(args.length == 0) inputFile = "in/in0.conf";
 		else inputFile = args[0];
-		if(args.length < 1) outputFile = "out/out1_1.txt";
+		if(args.length < 1) outputFile = "out/out0_1_1.txt";
 		else outputFile = args[1];
 		if(args.length < 2) iterations = 5;
 		else iterations = Integer.parseInt(args[2]);
@@ -151,7 +149,7 @@ public class Simulation {
 			double currentFitness = Double.MIN_VALUE;
 			for (int i = 0; i < firms.size(); i++) {
 				Firm f = (Firm)firms.get(i);
-				double focalFitness = f.getFitness();
+				double focalFitness = f.getFitnessRanking();
 				if (currentFitness == focalFitness) {
 					f.setRank(currentRank);
 				} else {
@@ -166,8 +164,24 @@ public class Simulation {
 			// output results
 			for (Firm f : firms) {
 				// Globals.out.println(t + "\t" + f.toStringWithFitness(landscape));
-				Globals.out.println(t + "\t" + f.getFirmID()+ "\t" + f.getRank() + "\t" + f.printResConfig(f.getResourceConfig()) + "\t" + f.getFitness());
+				Globals.out.println(t + "\t" + f.getFirmID()+ "\t" + f.getRank() + "\t" + f.printResConfig(f.getResourceConfig()) + "\t" + f.getFitness()+"\t"+f.getFitnessRanking()+"\t"+f.getSize());
 //				dbConnector.saveFitness(new Fitness(time, inputFile, t, f.getFitness(), f.getFirmID()));
+			}
+		}
+
+		for(Map.Entry<Integer, Set<Firm>> entry: Globals.getSharingFirms().entrySet()){
+			StringBuilder sb = new StringBuilder();
+			sb.append("R\t"+entry.getKey());
+			for(Firm f: entry.getValue()) {
+				sb.append("\t"+f.getFirmID());
+			}
+			Globals.out.println(sb.toString());
+		}
+
+
+		for(Firm f: firms){
+			for(Map.Entry<Integer, Integer> entry: f.getBorrowedComponents().entrySet()){
+				Globals.out.println("B\t"+f.getFirmID()+"\t"+entry.getKey()+"\t"+entry.getValue());
 			}
 		}
 

@@ -7,7 +7,7 @@ End of inputs:15
 Starting Time: 1
 Times to repeat: 50
 Iterations in one run: 100
-Influence matrix: matrix12
+Influence matrix: 12
 ```
 Save To DB Program
 ```buildoutcfg

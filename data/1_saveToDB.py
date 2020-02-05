@@ -1,10 +1,10 @@
-#import pymysql
+# import pymysql
 import mysql.connector
 import math
 import os
 
 def main():
-    #db = pymysql.connect("localhost", "root", "19980312", "hyper_simulation")
+    # db = pymysql.connect("localhost", "root", "19980312", "hyper_simulation")
     db = mysql.connector.connect(host="localhost", user="hangzhi", passwd="hangzhi", database="hyper_simulation")
     mycursor = db.cursor()
 
@@ -14,7 +14,7 @@ def main():
 
     for m in matrixNum:
         for i in range(int(inputFiles[0]), int(inputFiles[1]) + 1):
-            countVal, componentVal, curMatrix, inputFile = [], [], "", "in" + str(i) + ".conf"
+            borrowingVal, lendingVal, countVal, componentVal, curMatrix, inputFile = [], [], [], [], "", "in" + str(i) + ".conf"
             for t in range(int(numTime[0]), int(numTime[1]) + 1):
                 fitnessVal = []
                 fileName = "../out/out" +m+"_"+ str(i) + "_" + str(t) + ".txt"
@@ -42,13 +42,20 @@ def main():
                         countVal.append((
                                         t, inputFile, curMatrix, int(countExp), int(countAdd), int(countDrop), int(countBorrow),
                                         int(countSwitch), int(firmId), float(finalFitness)))
+                    elif firstChar == "B":
+                        bFirm, CIndex, lFirm = l.split("\t")[1:]
+                        borrowingVal.append((t, inputFile, curMatrix, bFirm, CIndex, lFirm))
+                    elif firstChar == "R":
+                        CIndex = l.split("\t")[1]
+                        firmIds = ",".join(l.split("\t")[2:])
+                        lendingVal.append((t, inputFile, curMatrix, CIndex, firmIds))
                     else:
-                        iteration, firmId, rank, config, fitness = l.split("\t")
+                        iteration, firmId, rank, config, fitnessNorm, fitness, fSize = l.split("\t")
                         if math.isnan(float(fitness)): fitness = 0
                         fitnessVal.append(
-                            (t, inputFile, curMatrix, int(iteration), float(fitness), config, int(firmId), int(rank)))
+                            (t, inputFile, curMatrix, int(iteration), float(fitness), config, int(firmId), int(rank), float(fitnessNorm), int(fSize)))
 
-                fitnessSql = "INSERT INTO fitness (times, inputFile, matrix, iteration, fitness, fitnessConfig, firmId, firmRank) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                fitnessSql = "INSERT INTO fitness (times, inputFile, matrix, iteration, fitness, fitnessConfig, firmId, firmRank, fitnessNorm, fSize) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 mycursor.executemany(fitnessSql, fitnessVal)
                 os.remove(fileName)
                 db.commit()
@@ -56,8 +63,12 @@ def main():
 
             countSql = "INSERT INTO count (times, inputFile, matrix, countExp, countAdd, countDrop, countBorrow, countSwitch, firmId, finalFitness) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             componentSql = "INSERT INTO component (times, inputFile, matrix, size, CIndex) VALUES (%s, %s, %s, %s, %s)"
+            borrowingSql = "INSERT INTO borrowing (times, inputFile, matrix, bFirm, CIndex, lFirm) VALUES (%s, %s, %s, %s, %s, %s)"
+            lendingSql = "INSERT INTO lending (times, inputFile, matrix, Cindex, firmIds) VALUES (%s, %s, %s, %s, %s)"
             mycursor.executemany(countSql, countVal)
             mycursor.executemany(componentSql, componentVal)
+            mycursor.executemany(borrowingSql, borrowingVal)
+            mycursor.executemany(lendingSql, lendingVal)
             db.commit()
 
 if __name__ == '__main__':

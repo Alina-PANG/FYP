@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy
 import pandas as pd
 
-def countNum(cursor,inputFile,matrixNum, numTimes):
+def countNum(cursor,inputFile,matrixNum, numTimes, dir):
 
     meanArr = []
     stdArr = []
@@ -34,7 +34,7 @@ def countNum(cursor,inputFile,matrixNum, numTimes):
         df = pd.DataFrame(result)
         print(df)
 
-        fig, axs = plt.subplots(1, 5, figsize=(15, 3), sharey=True)
+        fig, axs = plt.subplots(1, 5, figsize=(15, 3))
 
         for j in range(0, 5):
             x, y = [], []
@@ -42,6 +42,12 @@ def countNum(cursor,inputFile,matrixNum, numTimes):
                 x.append(k)
                 y.append(collect[j][k])
             axs[j].bar(x, y)
-
+            # axs[j].set_ylabel("Between Times "+numTimes[0]+"-"+numTimes[1]+" Number of Firms")
+            # axs[j].set_xlabel("Occurence of a "+countArr[j]+" Decision in 100 iterations (1 run)")
         # plt.show()
-        plt.savefig("countResult_"+i+".png")
+        plt.title("InputFile = "+i)
+        fig.text(0.5, 0.01, "Occurence of a "+countArr[j]+" Decision in 100 iterations (1 run)", ha='center')
+        fig.text(0.01, 0.5, "Between Times "+numTimes[0]+"-"+numTimes[1]+" Number of Firms", va='center', rotation='vertical')
+        fig.tight_layout()
+        plt.savefig("result/"+dir+"/count_"+str(i)+".png")
+        plt.clf()

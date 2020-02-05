@@ -169,9 +169,64 @@ public class Landscape {
 			} 
 		}
 		// question
+
+//		double penalty = (double) count / Globals.getN();
+//		double penalty = ((double)count / Globals.getN()) * ((double)count / Globals.getN());
+		double penalty = Math.sqrt((double)count / Globals.getN());
+//		fitness = fitness / Globals.getN();
+//		fitness = fitness / Globals.getN() * penalty;
+		if(count == 0) return 0.0;
+		fitness = fitness / count * penalty;
+
+		// return fitness;
+		// Return Normalized fitness (fitness - landscapeMinFitness) / (landscapeMaxFitness - landscapeMinFitness)
+		// return (fitness - landscapeMinFitness) / (landscapeMaxFitness - landscapeMinFitness);
+		return (fitness / landscapeMaxFitness);
+	}
+
+	public double getFitnessRanking(String[] resConfig) {
+		double fitness = 0.0d;
+		//CALCULATE FITNESS
+		String[] config = new String[Globals.getN()];
+		int count = 0;
+		// replace empty settings with commonResourceConfig
+		for (int i = 0; i < resConfig.length; i++) {
+			if (resConfig[i].equals(" ")) {
+				config[i] = commonResourceConfig[i];
+			} else {
+				config[i] = resConfig[i];
+				count ++;
+			}
+			// System.out.print(config[i]);
+		}
+
+		Location loc = new Location(config);
+
+		/*
+		 * the case where all resources (even those that aren't used by the firm) contribute to fitness
+		 */
+		// for (int i = 0; i < Globals.getN(); i++) {
+		// 	String s = loc.getLocationAt(i, im);
+		// 	fitness += getFitnessContribution(s, i);
+		// }
+		// fitness = fitness / Globals.getN();
+
+		/*
+		 * the case where only resources used by the firm contribute to fitness
+		 */
+
+		for (int i = 0; i < Globals.getN(); i++) {
+			String s = loc.getLocationAt(i, im);
+			if (!resConfig[i].equals(" ")) {
+				fitness += getFitnessContribution(s, i);
+			}
+		}
+		// question
+
 		fitness = fitness / Globals.getN();
-//		if(count == 0) return 0.0;
-//		fitness = fitness / count;
+//		fitness = fitness / Globals.getN() * penalty;
+		if(count == 0) return 0.0;
+//		fitness = fitness / count * penalty;
 
 		// return fitness;
 		// Return Normalized fitness (fitness - landscapeMinFitness) / (landscapeMaxFitness - landscapeMinFitness)
