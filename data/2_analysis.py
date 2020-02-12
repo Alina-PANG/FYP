@@ -7,17 +7,20 @@ def main():
     db = mysql.connector.connect(host="localhost", user="hangzhi", passwd="hangzhi", database="hyper_simulation")
     cursor = db.cursor()
     inputFile = input("input file number: ").split(',')
-    matrixNum = input("matrix number: ")
+    matrixNums = input("matrix number: ").split(',')
     iterationNum = int(input("number of iterations: "))
     numTimes = input("start and end of times: ").split(',')
-    dir = "t".join(numTimes)+"_m"+matrixNum+"_"+"i".join(inputFile)
-    if not os.path.exists("result/"+dir):
-        os.makedirs("result/"+dir)
-    fitness.firmSizeAndFitness(cursor,inputFile,matrixNum, numTimes, dir)
-    fitness.performanceIteration(cursor,inputFile,matrixNum, iterationNum, numTimes, dir)
-    fitness.avgRankChange(cursor, inputFile, matrixNum,iterationNum, numTimes, dir)
-    count.countNum(cursor,inputFile,matrixNum, numTimes, dir)
-    network.centralityAnalysis(cursor,inputFile,matrixNum, numTimes, dir)
+
+    for matrixNum in matrixNums:
+        dir = "t".join(numTimes) + "_m" + matrixNum + "_" + "i".join(inputFile)
+        if not os.path.exists("result/" + dir):
+            os.makedirs("result/" + dir)
+        fitness.firmSizeAndFitness(cursor,inputFile,matrixNum, numTimes, dir)
+        fitness.performanceIteration(cursor,inputFile,matrixNum, iterationNum, numTimes, dir)
+        fitness.avgRankChange(cursor, inputFile, matrixNum,iterationNum, numTimes, dir)
+        count.countNum(cursor,inputFile,matrixNum, numTimes, dir)
+        network.centralityAnalysis(cursor,inputFile,matrixNum, numTimes, dir)
+
     db.close()
 
 if __name__ == '__main__':

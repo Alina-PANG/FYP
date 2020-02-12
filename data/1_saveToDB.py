@@ -35,7 +35,7 @@ def main():
                     elif firstChar == "L":
                         iteration, config, fitness = l.split("\t")[1:]
                         if math.isnan(float(fitness)): fitness = 0
-                        fitnessVal.append((t, inputFile, curMatrix, int(iteration), float(fitness), config, -1, -1))
+                        fitnessVal.append((t, inputFile, curMatrix, int(iteration), float(fitness), config, -1, -1, -1, -1))
                     elif firstChar == "N":
                         firmId, countExp, countAdd, countDrop, countBorrow, countSwitch, finalFitness = l.split("\t")[1:]
                         if math.isnan(float(finalFitness)): finalFitness = 0
@@ -52,14 +52,13 @@ def main():
                     else:
                         iteration, firmId, rank, config, fitnessNorm, fitness, fSize = l.split("\t")
                         if math.isnan(float(fitness)): fitness = 0
-                        fitnessVal.append(
-                            (t, inputFile, curMatrix, int(iteration), float(fitness), config, int(firmId), int(rank), float(fitnessNorm), int(fSize)))
+                        fitnessVal.append((t, inputFile, curMatrix, int(iteration), float(fitness), config, int(firmId), int(rank), float(fitnessNorm), int(fSize)))
 
                 fitnessSql = "INSERT INTO fitness (times, inputFile, matrix, iteration, fitness, fitnessConfig, firmId, firmRank, fitnessNorm, fSize) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 mycursor.executemany(fitnessSql, fitnessVal)
-                os.remove(fileName)
                 db.commit()
                 f.close()
+                os.remove(fileName)
 
             countSql = "INSERT INTO count (times, inputFile, matrix, countExp, countAdd, countDrop, countBorrow, countSwitch, firmId, finalFitness) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             componentSql = "INSERT INTO component (times, inputFile, matrix, size, CIndex) VALUES (%s, %s, %s, %s, %s)"

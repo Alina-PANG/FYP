@@ -160,6 +160,16 @@ public class Globals {
 		}
 	}
 
+	public static boolean checkIfSharingFirmAndComponentExist(int componentIndex, int f){
+		if(!sharingFirms.containsKey(componentIndex)){
+			return false;
+		}
+		for(Integer k: sharingFirms.keySet()){
+			if(((Firm)sharingFirms.get(k)).getFirmID() == f) return true;
+		}
+		return false;
+	}
+
 	public static void addSharingFirms(int componentIndex, Firm f) {
 		if(sharingFirms.containsKey(componentIndex)){
 			sharingFirms.get(componentIndex).add(f);

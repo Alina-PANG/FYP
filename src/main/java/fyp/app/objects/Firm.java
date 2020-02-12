@@ -187,7 +187,8 @@ public class Firm implements Comparable<Firm> {
 		double newUtility = Simulation.landscape.getFitness(newConfig);
 
 		System.out.println("Resource Decision: "+resourceDecision+" New Utility = "+newUtility+", curFit = "+currentFitness+", threshold = "+threshold+" Num Res = "+numResources);
-		boolean absoluteDecision = resourceDecision.equals("abs") && (newUtility - currentFitness > threshold);
+		boolean absoluteDecision = resourceDecision.equals("abs") && (newUtility >= currentFitness * (1 + threshold));
+		// relative is not implemented yet
 		boolean relativeDecision = resourceDecision.equals("rel") && (newUtility - currentFitness) / numResources > threshold;
 
 		if (absoluteDecision || relativeDecision){
@@ -314,9 +315,18 @@ public class Firm implements Comparable<Firm> {
 		}
 	}
 
-	public void removeBorrowedComponentAndFirm(int cIndex){
-		this.borrowedComponents.remove(cIndex);
-	}
+//	public void syncBorrowedComponentAndFirm(){
+//		Set<Integer> set = this.borrowedComponents.keySet();
+//		Iterator<Integer> it = set.iterator();
+//		while(it.hasNext()){
+//			Integer cIndex = it.next();
+//			boolean exists = Globals.checkIfSharingFirmAndComponentExist(cIndex, borrowedComponents.get(cIndex));
+//			if(!exists){
+//
+//			}
+//		}
+//		this.borrowedComponents.remove(cIndex);
+//	}
 
 
 //	private void addResource() {
@@ -529,7 +539,10 @@ public class Firm implements Comparable<Firm> {
 	}
 
 	public void syncComponent(){
-		for(Map.Entry<Integer, Integer> entry: borrowedComponents.entrySet()){
+		Set<Map.Entry<Integer, Integer>> set = borrowedComponents.entrySet();
+		Iterator it = set.iterator();
+		while(it.hasNext()){
+			Map.Entry<Integer, Integer> entry = (Map.Entry<Integer, Integer>)it.next();
 			// check if still sharing
 			Set<Firm> f = Globals.getSharingFirmsForComponent(entry.getKey());
 			List<Integer> resIndices = Globals.getComponentByIndex(entry.getKey());
@@ -537,6 +550,7 @@ public class Firm implements Comparable<Firm> {
 			if(!f.contains(lendingFirm)) {
 				System.out.println("Firm "+this.firmID+" ceases to lend from firm "+lendingFirm.getFirmID()+" component "+entry.getKey());
 				for(int index: resIndices) this.resourceConfig[index] = " ";
+				it.remove();
 				System.out.println("New Config: "+printResConfig(this.resourceConfig)+" new fitness: "+this.getFitness());
 				continue;
 			}
@@ -570,7 +584,9 @@ public class Firm implements Comparable<Firm> {
 				System.out.println("Firm with ID "+this.getFirmID()+" decides to lend component "+i+" "+Globals.getComponentByIndex(i)+" with config "+printResConfig(resourceConfig));
 				Globals.addSharingFirms(i, this);
 			} else if(have && borrowedComponents.containsKey(i)){
+				System.out.println("Firm with ID "+this.getFirmID()+" ceases lending component "+i+" "+Globals.getComponentByIndex(i)+" with config "+printResConfig(resourceConfig));
 				Globals.removeSharingFirm(i ,this);
+
 			}
 		}
 		if(borrowedComponents.size() != 0) System.out.println("Firm with ID "+this.getFirmID()+" has borrowed components: "+borrowedComponents);//output

@@ -133,6 +133,8 @@ public class Simulation {
 			for(Firm f: firms){
 				f.componentOperations(2);
 			}
+
+			System.out.println("Syncing Components >>>");
 			// sync components: ceases to lend, update changed resources in borrowed component
 			for(Firm f: firms){
 				f.syncComponent();
@@ -161,9 +163,11 @@ public class Simulation {
 
 			Globals.out.println("L\t"+t+"\t"+landscape.commonConfigToString()+"\t"+landscape.getLandscapeFitness());
 //			dbConnector.saveFitness(new Fitness(time, inputFile, t, landscape.getLandscapeFitness(), -1));
+			System.out.println(">>>> Firm size: ");
 			// output results
 			for (Firm f : firms) {
 				// Globals.out.println(t + "\t" + f.toStringWithFitness(landscape));
+				System.out.println(f.getFirmID()+": "+f.getSize()+" "+f.printResConfig(f.getResourceConfig()));
 				Globals.out.println(t + "\t" + f.getFirmID()+ "\t" + f.getRank() + "\t" + f.printResConfig(f.getResourceConfig()) + "\t" + f.getFitness()+"\t"+f.getFitnessRanking()+"\t"+f.getSize());
 //				dbConnector.saveFitness(new Fitness(time, inputFile, t, f.getFitness(), f.getFirmID()));
 			}
