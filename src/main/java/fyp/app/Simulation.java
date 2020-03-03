@@ -46,7 +46,7 @@ public class Simulation {
 		// LANDSCAPE INITIALIZATION
 		String inputFile, outputFile, inf;
 		int iterations, time;
-		if(args.length == 0) inputFile = "in/in0.conf";
+		if(args.length == 0) inputFile = "in/in1.conf";
 		else inputFile = args[0];
 		if(args.length < 1) outputFile = "out/out0_1_1.txt";
 		else outputFile = args[1];

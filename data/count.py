@@ -46,7 +46,7 @@ def countNum(cursor,inputFile,matrixNum, numTimes, dir):
             # axs[j].set_xlabel("Occurence of a "+countArr[j]+" Decision in 100 iterations (1 run)")
         # plt.show()
         plt.title("InputFile = "+i)
-        fig.text(0.5, 0.01, "Occurence of a "+countArr[j]+" Decision in 100 iterations (1 run)", ha='center')
+        fig.text(0.5, 0.01, "Occurence of a Decision in 100 iterations (1 run)", ha='center')
         fig.text(0.01, 0.5, "Between Times "+numTimes[0]+"-"+numTimes[1]+" Number of Firms", va='center', rotation='vertical')
         fig.tight_layout()
         plt.savefig("result/"+dir+"/count_"+str(i)+".png")

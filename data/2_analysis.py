@@ -15,6 +15,8 @@ def main():
         dir = "t".join(numTimes) + "_m" + matrixNum + "_" + "i".join(inputFile)
         if not os.path.exists("result/" + dir):
             os.makedirs("result/" + dir)
+        fitness.polyRegressionTime (cursor, inputFile, matrixNum, dir)
+        # fitness.polyRegression(cursor, inputFile, matrixNum, numTimes, dir)
         fitness.firmSizeAndFitness(cursor,inputFile,matrixNum, numTimes, dir)
         fitness.performanceIteration(cursor,inputFile,matrixNum, iterationNum, numTimes, dir)
         fitness.avgRankChange(cursor, inputFile, matrixNum,iterationNum, numTimes, dir)

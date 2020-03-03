@@ -9,8 +9,8 @@ def main():
     mycursor = db.cursor()
 
     inputFiles = input("input file number: ").split(',')
-    numTime = input("start and end of times: ").split(',')
-    matrixNum = input("matrix: ").split(",")
+    numTime = ['1','50']
+    matrixNum = ['3','6','9','12','15']
 
     for m in matrixNum:
         for i in range(int(inputFiles[0]), int(inputFiles[1]) + 1):
