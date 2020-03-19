@@ -1,5 +1,5 @@
 # import pymysql
-import mysql.connector
+pimport mysql.connector
 import os
 
 def main():

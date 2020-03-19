@@ -1,0 +1,65 @@
+Mean of fitness: 
+
+                           OLS Regression Results
+==============================================================================
+Dep. Variable:                fitness   R-squared:                       0.832
+Model:                            OLS   Adj. R-squared:                  0.828
+Method:                 Least Squares   F-statistic:                     216.5
+Date:                Thu, 05 Mar 2020   Prob (F-statistic):           1.15e-82
+Time:                        20:58:57   Log-Likelihood:                 214.86
+No. Observations:                 225   AIC:                            -417.7
+Df Residuals:                     219   BIC:                            -397.2
+Df Model:                           5
+Covariance Type:            nonrobust
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      0.7565      0.036     20.894      0.000       0.685       0.828
+innovation     0.0931      0.031      3.019      0.003       0.032       0.154
+cost          -1.0195      0.031    -32.411      0.000      -1.081      -0.957
+minSize       -0.0140      0.006     -2.292      0.023      -0.026      -0.002
+maxSize       -0.0106      0.006     -1.727      0.086      -0.023       0.001
+matrix        -0.0041      0.001     -2.787      0.006      -0.007      -0.001
+==============================================================================
+Omnibus:                       27.940   Durbin-Watson:                   0.615
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):                8.431
+Skew:                          -0.112   Prob(JB):                       0.0148
+Kurtosis:                       2.078   Cond. No.                         76.7
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+
+
+Standard Error of fitness:
+
+                            OLS Regression Results
+==============================================================================
+Dep. Variable:                    std   R-squared:                       0.369
+Model:                            OLS   Adj. R-squared:                  0.354
+Method:                 Least Squares   F-statistic:                     25.58
+Date:                Thu, 05 Mar 2020   Prob (F-statistic):           2.70e-20
+Time:                        20:58:57   Log-Likelihood:                 675.50
+No. Observations:                 225   AIC:                            -1339.
+Df Residuals:                     219   BIC:                            -1319.
+Df Model:                           5
+Covariance Type:            nonrobust
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      0.0894      0.005     19.130      0.000       0.080       0.099
+innovation    -0.0141      0.004     -3.543      0.000      -0.022      -0.006
+cost          -0.0246      0.004     -6.047      0.000      -0.033      -0.017
+minSize        0.0013      0.001      1.623      0.106      -0.000       0.003
+maxSize        0.0018      0.001      2.248      0.026       0.000       0.003
+matrix         0.0015      0.000      8.030      0.000       0.001       0.002
+==============================================================================
+Omnibus:                        6.677   Durbin-Watson:                   1.178
+Prob(Omnibus):                  0.035   Jarque-Bera (JB):                6.585
+Skew:                          -0.341   Prob(JB):                       0.0372
+Kurtosis:                       3.488   Cond. No.                         76.7
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.

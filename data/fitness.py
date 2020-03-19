@@ -239,7 +239,7 @@ def performanceIteration(cursor, inputFile,matrixNum, iterationNum, numTimes, di
     plt.close()
 
 def avgRankChange(cursor, inputFile, matrixNum,iterationNum, numTimes, dir):
-    firms = range(0, 20)
+    firms = range(0, 50)
     for f in inputFile:
         meanArr = []
         stdArr = []
